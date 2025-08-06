@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Usuários - Sistema de Anúncios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Fonte moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Estilo visual moderno -->
+  <style>
+    :root {
+      --cor-principal: #6C63FF;
+      --cor-secundaria: #2CB67D;
+      --cor-fundo: #F5F7FA;
+      --cor-texto: #333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+    }
+
+    header {
+      background: linear-gradient(90deg, var(--cor-principal), var(--cor-secundaria));
+      color: white;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    h1, h2 {
+      color: var(--cor-principal);
+      margin-bottom: 1rem;
+    }
+
+    form {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input {
+      margin-bottom: 1rem;
+      padding: 0.6rem;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 0.5rem;
+    }
+
+    .btn-primary {
+      background-color: var(--cor-principal);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #584fda;
+    }
+
+    .btn-secondary {
+      background-color: #999;
+      color: white;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      padding: 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #f1f1f1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #ddd;
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav {
+        margin-top: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header>
+    <div class="logo">📋 Cadastro de Usuários</div>
+    <nav>
+      <a href="/usuario" class="active">Usuários</a>
+      <a href="/anuncio">Anúncios</a>
+      <a href="/pergunta">Perguntas</a>
+      <a href="/">Início</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Cadastro de Usuários</h1>
+
+    <form action="/usuario/novo" method="POST">
+      <label for="nome">Nome</label>
+      <input type="text" name="nome" id="nome" required>
+
+      <label for="email">E-mail</label>
+      <input type="email" name="email" id="email" required>
+
+      <label for="senha">Senha</label>
+      <input type="password" name="senha" id="senha" required>
+
+      <button type="submit" class="btn btn-primary">Cadastrar</button>
+      <a href="/" class="btn btn-secondary">Voltar à Página Inicial</a>
+    </form>
+
+    <h2>Usuários Cadastrados</h2>
+
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Nome</th><th>Email</th><th>Ações</th></tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ u.id }}</td>
+          <td>{{ u.nome }}</td>
+          <td>{{ u.email }}</td>
+          <td>
+            <a href="/usuario/deletar/{{ u.id }}" class="btn btn-danger btn-sm">Excluir</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    © 2025 Sistema de Anúncios
+  </footer>
+
+</body>
+</html>
