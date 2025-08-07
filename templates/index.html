@@ -1,175 +1,205 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Início - Sistema de Anúncios</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="UTF-8">
+    <title>Anúncios - Sistema de Anúncios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Fonte moderna -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Estilos modernos personalizados -->
-  <style>
-    :root {
-      --cor-principal: #6C63FF;
-      --cor-secundaria: #2CB67D;
-      --cor-fundo: #F5F7FA;
-      --cor-texto: #333;
-    }
+    <style>
+      :root {
+        --cor-principal: #e70b0b;
+        --cor-secundaria: #00000000;
+        --cor-fundo: #ffffff;
+        --cor-texto: #000000;
+      }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--cor-fundo);
-      color: var(--cor-texto);
-    }
+      body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+      }
 
-    header {
-      background: linear-gradient(90deg, var(--cor-principal), var(--cor-secundaria));
-      color: white;
-      padding: 1.5rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    header .logo {
-      font-size: 1.8rem;
-      font-weight: bold;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-weight: 600;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    main {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-size: 2.5rem;
-      color: var(--cor-principal);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-    }
-
-    .card {
-      background-color: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .card-body {
-      padding: 1rem;
-    }
-
-    .card-body h2 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .card-body p {
-      font-size: 0.95rem;
-      color: #666;
-    }
-
-    .preco {
-      margin-top: 1rem;
-      color: var(--cor-secundaria);
-      font-weight: bold;
-    }
-
-    footer {
-      background-color: #ddd;
-      text-align: center;
-      padding: 1rem;
-      margin-top: 22rem;
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 600px) {
       header {
-        flex-direction: column;
-        align-items: flex-start;
+        background: linear-gradient(90deg, var(--cor-principal), var(--cor-secundaria));
+        color: rgb(0, 0, 0);
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
-      nav {
-        margin-top: 1rem;
+      header .logo {
+        font-size: 1.8rem;
+        font-weight: bold;
       }
-    }
-  </style>
-</head>
-<body>
 
-  <!-- Cabeçalho -->
-  <header>
-    <div class="logo">📢 Melhor Preço</div>
-    <nav>
-      <a href="/usuario">Cadastro de Usuários</a>
-      <a href="/anuncio">Criar Anúncios</a>
-      <a href="/pergunta">Perguntas</a>
-    </nav>
-  </header>
+      nav a {
+        color: rgb(2, 2, 2);
+        text-decoration: none;
+        margin-left: 1.5rem;
+        font-weight: 600;
+      }
 
-  
-  <main>
-    <h1>Bem-vindo ao Melhor Preço</h1>
+      nav a:hover {
+        text-decoration: underline;
+      }
 
-    {% if anuncios %}
-    <div class="grid">
-      {% for anuncio in anuncios %}
-      <div class="card">
-        <img src="https://via.placeholder.com/400x200.png?text={{ anuncio.titulo | urlencode }}" alt="Imagem do anúncio">
-        <div class="card-body">
-          <h2>{{ anuncio.titulo }}</h2>
-          <p>{{ anuncio.descricao }}</p>
-          <p class="preco">R$ {{ anuncio.preco }}</p>
-        </div>
+      main {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+      }
+
+      h1, h2 {
+        color: var(--cor-principal);
+        margin-bottom: 1rem;
+      }
+
+      form {
+        background-color: rgb(248, 247, 247);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgb(5, 5, 5);
+        margin-bottom: 2rem;
+      }
+
+      label {
+        font-weight: 600;
+      }
+
+      input, textarea, select {
+        margin-bottom: 1rem;
+        padding: 0.6rem;
+        width: 100%;
+        border: 1px solid #050505;
+        border-radius: 6px;
+      }
+
+      .btn {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-right: 0.5rem;
+      }
+
+      .btn-primary {
+        background-color: var(--cor-principal);
+        color: rgb(255, 248, 248);
+      }
+
+      .btn-primary:hover {
+        background-color: #584fda;
+      }
+
+      .btn-secondary {
+        background-color: #fffafa;
+        color: rgb(0, 0, 0);
+      }
+
+      .btn-danger {
+        background-color: #dc3545;
+        color: rgb(255, 255, 255);
+      }
+
+      .btn-danger:hover {
+        background-color: #c82333;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: rgb(255, 255, 255);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      }
+
+      th, td {
+        padding: 0.8rem;
+        text-align: left;
+        border-bottom: 1px solid #ffffff;
+      }
+
+      th {
+        background-color: #fffdfd;
+      }
+
+      footer {
+        text-align: center;
+        padding: 1rem;
+        background: #ffffff;
+        margin-top: 3rem;
+      }
+
+      @media (max-width: 600px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        nav {
+          margin-top: 1rem;
+        }
+      }
+
+      /* Centraliza o h1 na tela */
+      .centralizado {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+
+    <header>
+      <div class="logo">📢 Melhor Preço</div>
+      <nav>
+        <a href="/usuario">Usuários</a>
+        <a href="/anuncio" class="active">Anúncios</a>
+        <a href="/pergunta">Perguntas</a>
+        <a href="/">Início</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="centralizado">
+        <h1>Bem-vindo ao Melhor Preço</h1>
       </div>
-      {% endfor %}
-    </div>
-    {% else %}
-    <p class="text-center">Nenhum anúncio cadastrado no momento.</p>
-    {% endif %}
-  </main>
 
- 
-  <footer>
-    © 2025 Anuncie Fácil - Todos os direitos reservados.
-  </footer>
+      {% if anuncios %}
+      <div class="grid">
+        {% for anuncio in anuncios %}
+        <div class="card">
+          <img src="https://via.placeholder.com/400x200.png?text={{ anuncio.titulo | urlencode }}" alt="Imagem do anúncio">
+          <div class="card-body">
+            <h2>{{ anuncio.titulo }}</h2>
+            <p>{{ anuncio.descricao }}</p>
+            <p class="preco">R$ {{ anuncio.preco }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-center">Nenhum anúncio cadastrado no momento.</p>
+      {% endif %}
+    </main>
 
-</body>
+    <footer>
+      © 2025 Melhor Preço - Todos os direitos reservados.
+    </footer>
+
+  </body>
 </html>
