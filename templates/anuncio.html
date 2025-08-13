@@ -206,7 +206,10 @@
           <td>{{ a.descricao }}</td>
           <td>R$ {{ a.preco }}</td>
           <td>{{ a.usuario.nome }}</td>
-          <td><a href="/anuncio/deletar/{{ a.id }}" class="btn btn-danger btn-sm">Excluir</a></td>
+          <td>
+            <a href="/anuncio/editar/{{ a.id }}" class="btn btn-primary btn-sm">Editar</a>
+            <a href="/anuncio/deletar/{{ a.id }}" class="btn btn-danger btn-sm">Excluir</a>
+          </td>
         </tr>
         {% endfor %}
       </tbody>

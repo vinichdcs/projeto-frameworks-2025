@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <title>Formulário de Pergunta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      
+      :root {
+        --cor-principal: #e70b0b;
+        --cor-secundaria: #00000000;
+        --cor-fundo: #ffffff;
+        --cor-texto: #000000;
+      }
+  
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+  
+      body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+      }
+  
+      main {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+      }
+  
+      h1 {
+        color: var(--cor-principal);
+        margin-bottom: 1rem;
+      }
+  
+      form {
+        background-color: rgb(248, 247, 247);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgb(5, 5, 5);
+      }
+  
+      label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+  
+      input, textarea, select {
+        margin-bottom: 1rem;
+        padding: 0.6rem;
+        width: 100%;
+        border: 1px solid #050505;
+        border-radius: 6px;
+      }
+  
+      .btn {
+        padding: 0.6rem 1.2rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-right: 0.5rem;
+      }
+  
+      .btn-primary {
+        background-color: var(--cor-principal);
+        color: rgb(255, 248, 248);
+      }
+  
+      .btn-secondary {
+        background-color: #fffafa;
+        color: rgb(0, 0, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>{% if pergunta %}Editar Pergunta{% else %}Nova Pergunta{% endif %}</h1>
+      <form action="{% if pergunta %}/pergunta/editar/{{ pergunta.id }}{% else %}/pergunta/nova{% endif %}" method="POST">
+        <label for="texto">Pergunta</label>
+        <textarea name="texto" id="texto" required>{{ pergunta.texto if pergunta else '' }}</textarea>
+  
+        <label for="id_usuario">Usuário</label>
+        <select name="id_usuario" id="id_usuario">
+          {% for u in usuarios %}
+            <option value="{{ u.id }}" {% if pergunta and pergunta.id_usuario == u.id %}selected{% endif %}>{{ u.nome }}</option>
+          {% endfor %}
+        </select>
+  
+        <label for="id_anuncio">Anúncio</label>
+        <select name="id_anuncio" id="id_anuncio">
+          {% for a in anuncios %}
+            <option value="{{ a.id }}" {% if pergunta and pergunta.id_anuncio == a.id %}selected{% endif %}>{{ a.titulo }}</option>
+          {% endfor %}
+        </select>
+  
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="/pergunta" class="btn btn-secondary">Cancelar</a>
+      </form>
+    </main>
+  </body>
+</html>

@@ -159,8 +159,8 @@
   <header>
     <div class="logo">📢 Usuário</div>
     <nav>
-      <a href="/usuario">Usuários</a>
-      <a href="/anuncio" class="active">Anúncios</a>
+      <a href="/usuario" class="active">Usuários</a>
+      <a href="/anuncio">Anúncios</a>
       <a href="/pergunta">Perguntas</a>
       <a href="/">Início</a>
     </nav>
@@ -196,6 +196,7 @@
           <td>{{ u.nome }}</td>
           <td>{{ u.email }}</td>
           <td>
+            <a href="/usuario/editar/{{ u.id }}" class="btn btn-primary btn-sm">Editar</a>
             <a href="/usuario/deletar/{{ u.id }}" class="btn btn-danger btn-sm">Excluir</a>
           </td>
         </tr>
