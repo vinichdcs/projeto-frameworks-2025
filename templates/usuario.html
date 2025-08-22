@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuários - Sistema de Anúncios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --cor-principal: #e70b0b;
+        --cor-secundaria: #00000000;
+        --cor-fundo: #ffffff;
+        --cor-texto: #000000;
+      }
+      
+      body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+      }
+
+      .navbar {
+        background: linear-gradient(90deg, var(--cor-principal), var(--cor-secundaria));
+      }
+
+      .navbar-brand, .nav-link {
+        color: black !important;
+        font-weight: 600;
+      }
+      
+      .navbar-brand {
+        font-size: 1.8rem;
+        font-weight: bold;
+      }
+
+      .nav-link:hover {
+        text-decoration: underline;
+      }
+      
+      .table-container {
+        background-color: #f8f8f8;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: var(--cor-principal);
+        margin-bottom: 1rem;
+      }
+      
+      .btn-primary {
+        background-color: var(--cor-principal);
+        color: white;
+      }
+      
+      .btn-primary:hover {
+        background-color: #c82333;
+      }
+      
+      .btn-danger {
+        background-color: #dc3545;
+        color: white;
+      }
+      
+      .btn-danger:hover {
+        background-color: #c82333;
+      }
+    </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">👥 Usuários</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/usuario">Usuários</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/anuncio">Anúncios</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pergunta">Perguntas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/">Início</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1>Usuários Cadastrados</h1>
+          <a href="/usuario/novo" class="btn btn-primary">Novo Usuário</a>
+        </div>
+        
+        <div class="table-container">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Nome</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for u in usuarios %}
+                <tr>
+                  <td>{{ u.id }}</td>
+                  <td>{{ u.nome }}</td>
+                  <td>{{ u.email }}</td>
+                  <td>
+                    <a href="/usuario/editar/{{ u.id }}" class="btn btn-primary btn-sm me-2">Editar</a>
+                    <a href="/usuario/deletar/{{ u.id }}" class="btn btn-danger btn-sm">Excluir</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% if not usuarios %}
+            <p class="text-center text-muted mt-3">Nenhum usuário cadastrado.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="text-center py-3 bg-light mt-5">
+    <p class="mb-0">© 2025 Melhor Preço - Todos os direitos reservados.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+</body>
+</html>
