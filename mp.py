@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 app.secret_key = 'troque-esta-chave-para-producao' 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://mp:hellen13@localhost:3306/bancomp'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://frameworks2025:hellen13@frameworks2025.mysql.pythonanywhere-services.com:3306/frameworks2025$bancomp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
