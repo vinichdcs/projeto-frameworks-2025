@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Favoritos - Melhor Preço</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cor-principal: #e70b0b;
+            --cor-secundaria: #00000000;
+            --cor-fundo: #ffffff;
+            --cor-texto: #000000;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, var(--cor-principal), var(--cor-secundaria));
+        }
+
+        .navbar-brand, .nav-link {
+            color: black !important;
+            font-weight: 600;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-title {
+            color: var(--cor-principal);
+        }
+
+        .card-text .preco {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+   
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">📢 Melhor Preço</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Início</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('listar_favoritos') }}">Favoritos ♥</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    
+    <main class="container my-5">
+        <h2 class="text-center mb-4">Meus Favoritos</h2>
+        {% if anuncios %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for anuncio in anuncios %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            {% if anuncio.imagem_url %}
+                                <img src="{{ url_for('static', filename=anuncio.imagem_url.replace('/static/', '')) }}" class="card-img-top" alt="{{ anuncio.titulo }}">
+                            {% else %}
+                                <img src="https://via.placeholder.com/400x200.png?text={{ anuncio.titulo | urlencode }}" class="card-img-top" alt="Imagem do anúncio">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ anuncio.titulo }}</h5>
+                                <p class="card-text">{{ anuncio.descricao }}</p>
+                                <p class="card-text"><span class="preco">R$ {{ "%.2f"|format(anuncio.preco) }}</span></p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <a href="{{ url_for('compra', id=anuncio.id) }}" class="btn btn-success flex-fill me-2">Comprar</a>
+                                <a href="{{ url_for('remover_favorito', id=anuncio.id) }}" class="btn btn-outline-danger flex-fill">Desfavoritar ♥</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">Você ainda não adicionou nenhum favorito.</p>
+        {% endif %}
+    </main>
+
+   
+    <footer class="text-center py-3 bg-light mt-5">
+        <p class="mb-0">© 2025 Melhor Preço - Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
