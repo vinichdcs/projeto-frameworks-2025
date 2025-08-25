@@ -12,7 +12,6 @@ app.secret_key = 'troque-esta-chave-para-producao'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://frameworks2025:hellen13@frameworks2025.mysql.pythonanywhere-services.com:3306/frameworks2025$bancomp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -29,6 +28,7 @@ class Usuario(db.Model):
     senha = db.Column('usu_senha', db.String(256))
     anuncios = db.relationship('Anuncio', backref='usuario', lazy=True, cascade="all, delete-orphan")
     perguntas = db.relationship('Pergunta', backref='usuario', lazy=True, cascade="all, delete-orphan")
+    favoritos = db.relationship('Favorito', backref='usuario', lazy=True, cascade="all, delete-orphan")  # NOVO
 
 
 class Anuncio(db.Model):
@@ -40,6 +40,7 @@ class Anuncio(db.Model):
     imagem_url = db.Column(db.String(256))
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.usu_id'), nullable=False)
     perguntas = db.relationship('Pergunta', backref='anuncio', lazy=True, cascade="all, delete-orphan")
+    favoritos = db.relationship('Favorito', backref='anuncio', lazy=True, cascade="all, delete-orphan")  # NOVO
 
 
 class Pergunta(db.Model):
@@ -48,6 +49,13 @@ class Pergunta(db.Model):
     texto = db.Column(db.Text)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.usu_id'), nullable=False)
     id_anuncio = db.Column(db.Integer, db.ForeignKey('anuncio.id'), nullable=False)
+
+
+class Favorito(db.Model):
+    __tablename__ = 'favorito'
+    id = db.Column(db.Integer, primary_key=True)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.usu_id', ondelete='CASCADE'), nullable=False)  # CASCADE
+    id_anuncio = db.Column(db.Integer, db.ForeignKey('anuncio.id', ondelete='CASCADE'), nullable=False)      # CASCADE
 
 
 
@@ -113,6 +121,7 @@ def cadastro():
     return render_template('cadastro.html')
 
 
+
 @app.route('/usuario')
 @login_required
 def listar_usuarios():
@@ -159,9 +168,17 @@ def editar_usuario(id):
 def deletar_usuario(id):
     usuario = Usuario.query.get_or_404(id)
     if request.method == 'POST':
-        db.session.delete(usuario)
-        db.session.commit()
-        flash('Usuário excluído com sucesso!', 'info')
+        try:
+            
+            Favorito.query.filter_by(id_usuario=usuario.id).delete()
+            Anuncio.query.filter_by(id_usuario=usuario.id).delete()
+            Pergunta.query.filter_by(id_usuario=usuario.id).delete()
+            db.session.delete(usuario)
+            db.session.commit()
+            flash('Usuário excluído com sucesso!', 'info')
+        except Exception as e:
+            db.session.rollback()
+            flash('Erro ao excluir usuário. Verifique se há dados relacionados.', 'danger')
         return redirect(url_for('listar_usuarios'))
     return render_template('usuario_delete.html', usuario=usuario)
 
@@ -189,7 +206,6 @@ def novo_anuncio():
 
         id_usuario = session['usuario_id']
 
-        
         imagem_url = None
         if 'imagem' in request.files:
             file = request.files['imagem']
@@ -198,7 +214,6 @@ def novo_anuncio():
                 filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(filepath)
                 imagem_url = f"/{app.config['UPLOAD_FOLDER']}/{filename}"
-
 
         if not titulo or not preco_input:
             flash('Título e preço são obrigatórios!', 'danger')
@@ -238,7 +253,6 @@ def editar_anuncio(id):
             flash('Preço inválido!', 'danger')
             return redirect(url_for('editar_anuncio', id=id))
 
-       
         imagem = request.files.get('imagem')
         if imagem and imagem.filename != '':
             filename = secure_filename(imagem.filename)
@@ -268,6 +282,7 @@ def deletar_anuncio(id):
         flash('Anúncio excluído com sucesso!', 'info')
         return redirect(url_for('listar_anuncios'))
     return render_template('anuncio_delete.html', anuncio=anuncio)
+
 
 
 @app.route('/pergunta')
@@ -359,13 +374,48 @@ def confirmar_compra(id):
 
 
 
+@app.route('/favoritar/<int:id>')
+@login_required
+def adicionar_favorito(id):
+    favorito_existente = Favorito.query.filter_by(id_usuario=session['usuario_id'], id_anuncio=id).first()
+    if favorito_existente:
+        flash('Esse anúncio já está nos seus favoritos!', 'info')
+    else:
+        novo_favorito = Favorito(id_usuario=session['usuario_id'], id_anuncio=id)
+        db.session.add(novo_favorito)
+        db.session.commit()
+        flash('Anúncio adicionado aos favoritos!', 'success')
+    return redirect(url_for('index'))
+
+
+@app.route('/favorito')
+@login_required
+def listar_favoritos():
+    favoritos = Favorito.query.filter_by(id_usuario=session['usuario_id']).all()
+    anuncios_favoritos = [Anuncio.query.get(fav.id_anuncio) for fav in favoritos]
+    return render_template('favoritos.html', anuncios=anuncios_favoritos)
+
+
+@app.route('/favorito/remover/<int:id>')
+@login_required
+def remover_favorito(id):
+    favorito = Favorito.query.filter_by(id_usuario=session['usuario_id'], id_anuncio=id).first()
+    if favorito:
+        db.session.delete(favorito)
+        db.session.commit()
+        flash('Anúncio removido dos favoritos!', 'info')
+    return redirect(url_for('listar_favoritos'))
+
+
+
 @app.route('/')
 def index():
     anuncios = Anuncio.query.all()
     return render_template('index.html', anuncios=anuncios)
 
 
+
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
+        db.create_all() 
     app.run(debug=True)
