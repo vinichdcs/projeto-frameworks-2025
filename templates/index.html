@@ -80,6 +80,11 @@
                             <a class="nav-link active" aria-current="page" href="/">Início</a>
                         </li>
                         {% if 'usuario_id' in session %}
+                            <!-- ADICIONADO: Botão Favoritos no cabeçalho -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('listar_favoritos') }}">Favoritos ♥</a>
+
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Olá, {{ session['usuario_nome'] }}</a>
                             </li>
@@ -136,8 +141,13 @@
                             <a href="{{ url_for('deletar_anuncio', id=anuncio.id) }}" class="btn btn-sm btn-outline-danger">Excluir</a>
                         {% elif 'usuario_id' not in session %}
                             <p class="text-muted mb-0">Faça login para interagir</p>
+                        {% else %}
+                            <!-- Botões Comprar + Favoritar -->
+                            <div class="d-flex gap-2 w-100 mt-2">
+                                <a href="{{ url_for('compra', id=anuncio.id) }}" class="btn btn-sm btn-success flex-fill">Comprar</a>
+                                <a href="{{ url_for('adicionar_favorito', id=anuncio.id) }}" class="btn btn-sm btn-outline-danger flex-fill">Favoritar ♥</a>
+                            </div>
                         {% endif %}
-                        
                     </div>
                 </div>
             </div>
