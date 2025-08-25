@@ -337,6 +337,28 @@ def deletar_pergunta(id):
 
 
 
+@app.route('/compra/<int:id>', methods=['GET'])
+@login_required
+def compra(id):
+    anuncio = Anuncio.query.get_or_404(id)
+    return render_template('compra.html', anuncio=anuncio)
+
+
+@app.route('/confirmar_compra/<int:id>', methods=['POST'])
+@login_required
+def confirmar_compra(id):
+    anuncio = Anuncio.query.get_or_404(id)
+    pagamento = request.form['pagamento']
+
+    if anuncio.id_usuario == session['usuario_id']:
+        flash('Você não pode comprar seu próprio anúncio.', 'warning')
+        return redirect(url_for('index'))
+
+    flash(f'Compra confirmada do anúncio "{anuncio.titulo}" via {pagamento}. Para dar continuidade ao pagamento, verifique seu e-mail.', 'success')
+    return redirect(url_for('index'))
+
+
+
 @app.route('/')
 def index():
     anuncios = Anuncio.query.all()
